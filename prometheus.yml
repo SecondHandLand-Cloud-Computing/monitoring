@@ -1,0 +1,36 @@
+global:
+  scrape_interval: 15s # Tần suất Prometheus đi thu thập metrics
+  scrape_timeout: 10s # Timeout mỗi lần scrape (phải < scrape_interval)
+  evaluation_interval: 15s # Tần suất đánh giá alerting rules
+
+scrape_configs:
+  - job_name: "backend-aws-auto-discovery"
+    ec2_sd_configs:
+      - region: ap-southeast-1 # sua dung region
+        port: 5000
+    relabel_configs:
+      - source_labels: [__meta_ec2_tag_Role]
+        regex: AppServer
+        action: keep
+
+  - job_name: "redis-aws-auto-discovery"
+    ec2_sd_configs:
+      - region: ap-southeast-1 # sua dung region
+        port: 9121
+    relabel_configs:
+      - source_labels: [__meta_ec2_tag_Role]
+        regex: AppServer
+        action: keep
+
+  - job_name: "cadvisor-aws-auto-discovery"
+    ec2_sd_configs:
+      - region: ap-southeast-1 # sua dung region
+        port: 8080
+    relabel_configs:
+      - source_labels: [__meta_ec2_tag_Role]
+        regex: AppServer
+        action: keep
+
+  - job_name: "mongodb"
+    static_configs:
+      - targets: ["mongodb-exporter:9216"]
