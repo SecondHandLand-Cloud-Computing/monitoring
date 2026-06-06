@@ -1,0 +1,22 @@
+name: Deploy Monitor Dashboard
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Monitor EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.MONITOR_EC2_HOST }}
+          username: ${{ secrets.MONITOR_EC2_USERNAME }}
+          key: ${{ secrets.MONITOR_EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/monitoring
+            git pull origin main
+            sudo docker-compose restart grafana
