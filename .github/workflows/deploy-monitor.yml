@@ -19,4 +19,4 @@ jobs:
           script: |
             cd /home/ubuntu/monitoring
             git pull origin main
-            sudo docker-compose restart grafana
+            sudo docker-compose up -d
