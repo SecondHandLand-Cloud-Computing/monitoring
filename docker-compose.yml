@@ -39,6 +39,7 @@ services:
       - '--storage.tsdb.retention.size=10GB'
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: unless-stopped
 
 volumes:
   grafana_data:
